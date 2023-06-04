@@ -1,101 +1,28 @@
-import { IEmbeddingFunction } from "./IEmbeddingFunction";
-let webAI: any;
+ Here is my proposed solution:
 
-export class WebAIEmbeddingFunction implements IEmbeddingFunction {
-  private model;
-  private proxy?: boolean;
+For file1.py:
+- Remove the increment_index() function definition  
+- Remove all calls to increment_index() and replace with calls to add()
+- Update the docstring to remove references to increment_index
 
-  /**
-   * WebAIEmbeddingFunction constructor.
-   * @param modality - the modality of the embedding function, either "text" or "image".
-   * @param node - whether the embedding function is being used in a NodeJS environment.
-   * @param proxy - whether to use web worker to avoid blocking the main thread. Works only in browser.
-   * @param wasmPath - the path/URL to the directory with ONNX runtime WebAssembly files. Has to be specified when running in NodeJS.
-   * @param modelID - the ID of the model to use, if not specified, the default model will be used.
-   */
-  constructor(
-    modality: "text" | "image",
-    node: boolean,
-    proxy?: boolean,
-    wasmPath?: string,
-    modelID?: string
-  ) {
-    if (node) {
-      this.proxy = proxy ? proxy : false;
-      try {
-        webAI = require("@visheratin/web-ai-node");
-      } catch (e) {
-        console.log(e);
-        throw new Error(
-          "Please install the @visheratin/web-ai-node package to use the WebAIEmbeddingFunction, `npm install -S @visheratin/web-ai-node`"
-        );
-      }
-    } else {
-      this.proxy = proxy ? proxy : true;
-      try {
-        webAI = require("@visheratin/web-ai");
-      } catch (e) {
-        console.log(e);
-        throw new Error(
-          "Please install the @visheratin/web-ai package to use the WebAIEmbeddingFunction, `npm install -S @visheratin/web-ai`"
-        );
-      }
-    }
-    if (wasmPath) {
-      webAI.SessionParams.wasmRoot = wasmPath;
-    }
-    switch (modality) {
-      case "text": {
-        let id = "mini-lm-v2-quant"; //default text model
-        if (modelID) {
-          id = modelID;
-        }
-        const models = webAI.ListTextModels();
-        for (const modelMetadata of models) {
-          if (modelMetadata.id === id) {
-            this.model = new webAI.TextFeatureExtractionModel(modelMetadata);
-            return;
-          }
-        }
-        throw new Error(
-          `Could not find text model with id ${modelID} in the WebAI package`
-        );
-      }
-      case "image": {
-        let id = "efficientformer-l1-feature-quant"; //default image model
-        if (modelID) {
-          id = modelID;
-        }
-        const imageModels = webAI.ListImageModels();
-        for (const modelMetadata of imageModels) {
-          if (modelMetadata.id === id) {
-            this.model = new webAI.ImageFeatureExtractionModel(modelMetadata);
-            return;
-          }
-        }
-        throw new Error(
-          `Could not find image model with id ${modelID} in the WebAI package`
-        );
-      }
-    }
-  }
+For file2.py:
+- Remove the create_index() function definition
+- Remove all calls to create_index()  
+- Update the docstring to remove references to create_index
 
-  /**
-   * Generates embeddings for the given values.
-   * @param values - the values to generate embeddings for. For text models, this is an array of strings.
-   *  For image models, this is an array of URLs to images. URLs can be data URLs.
-   * @returns the embeddings.
-   */
-  public async generate(values: string[]): Promise<number[][]> {
-    if (!this.model.initialized) {
-      await this.model.init(this.proxy);
-    }
-    const output = await this.model.process(values);
-    const embeddings = output.result;
-    if (embeddings.length > 0 && Array.isArray(embeddings[0])) {
-      return embeddings;
-    } else {
-      return [embeddings];
-    }
-  }
-}
+For file3.py:
+- No changes needed as there are no references to increment_index or create_index
+
+For tests.py:
+- Remove the test_increment_index() test function  
+- Remove the test_create_index() test function
+- Ensure all remaining tests still pass  
+
+For documentation:
+- Remove all mentions of increment_index and create_index from the API documentation
+- Clarify that the add() function should be used instead for adding new elements
+
+To submit the pull request:
+- Commit the changes with a message like "Remove increment_index and create_index functions"
+- Push the changes to the remote repository
+- Create a pull request for the changes and describe the purpose to remove unnecessary complexity from the
