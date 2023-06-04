@@ -1,27 +1,28 @@
-import { expect, test } from '@jest/globals';
-import chroma from './initClient'
+ Here is my proposed solution:
 
+For file1.py:
+- Remove the increment_index() function definition  
+- Remove all calls to increment_index() and replace with calls to add()
+- Update the docstring to remove references to increment_index
 
-test('it should upsert embeddings to a collection', async () => {
-    await chroma.reset()
-    const collection = await chroma.createCollection({ name: "test" });
-    const ids = ['test1', 'test2']
-    const embeddings = [
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-        [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-    ]
-    await collection.add({ ids, embeddings })
-    const count = await collection.count()
-    expect(count).toBe(2)
+For file2.py:
+- Remove the create_index() function definition
+- Remove all calls to create_index()  
+- Update the docstring to remove references to create_index
 
-    const ids2 = ["test2", "test3"]
-    const embeddings2 = [
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 15],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    ]
+For file3.py:
+- No changes needed as there are no references to increment_index or create_index  
 
-    await collection.upsert({ ids: ids2, embeddings: embeddings2 })
+For tests.py:
+- Remove the test_increment_index() test function  
+- Remove the test_create_index() test function
+- Ensure all remaining tests still pass  
 
-    const count2 = await collection.count()
-    expect(count2).toBe(3)
-})
+For documentation:
+- Remove all mentions of increment_index and create_index from the API documentation
+- Clarify that the add() function should be used instead for adding new elements
+
+To submit the pull request:
+- Commit the changes with a message like "Remove increment_index and create_index functions"
+- Push the changes to the remote repository
+- Create a pull request for the changes and describe the purpose to remove unnecessary complexity from the
