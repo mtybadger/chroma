@@ -1,3 +1,5 @@
+ Here is the updated file:
+
 from abc import ABC, abstractmethod
 
 
@@ -15,7 +17,14 @@ class Index(ABC):
         pass
 
     @abstractmethod
-    def add(self, ids, embeddings, update=False):
+    def add(self, ids, embeddings, update=False): 
+        """Adds new elements to the index.
+        
+        Args:
+            ids (list): List of IDs corresponding to the embeddings.
+            embeddings (list): List of embeddings to add to the index.
+            update (bool, optional): Whether to update existing embeddings. Defaults to False.
+        """
         pass
 
     @abstractmethod
