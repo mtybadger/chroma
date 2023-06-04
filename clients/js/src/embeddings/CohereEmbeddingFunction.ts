@@ -1,28 +1,30 @@
-import { IEmbeddingFunction } from "./IEmbeddingFunction";
+ Here is the updated code:
 
-let CohereAiApi: any;
+import { IEmbeddingFunction } from "./IEmbeddingFunction";  
+
+let CohereAiApi: any;  
 
 export class CohereEmbeddingFunction implements IEmbeddingFunction {
     private api_key: string;
-    private model: string;
+    private model: string;  
 
     constructor({ cohere_api_key, model }: { cohere_api_key: string, model?: string }) {
-        try {
+        try {  
             // eslint-disable-next-line global-require,import/no-extraneous-dependencies
-            CohereAiApi = require("cohere-ai");
-        } catch {
-            throw new Error(
-                "Please install the cohere-ai package to use the CohereEmbeddingFunction, `npm install -S cohere-ai`"
-            );
+            CohereAiApi = require("cohere-ai");  
+        } catch {  
+            throw new Error(  
+                "Please install the cohere-ai package to use the CohereEmbeddingFunction, `npm install -S cohere-ai`"  
+            );  
         }
         this.api_key = cohere_api_key;
         this.model = model || "large";
-    }
+    }  
 
     public async generate(texts: string[]) {
-        const response = await CohereAiApi.embed({
+        const response = await CohereAiApi.embed({  
             texts: texts,
-            model: this.model,
+            model: this.model,  
         });
         return response.body.embeddings;
     }
